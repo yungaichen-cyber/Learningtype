@@ -1,0 +1,339 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>職涯探索小測驗</title>
+<style>
+:root{
+  --ink:#1F2340; --ink-soft:#4A4F6B; --paper:#FFFBF2; --card:#FFFFFF; --line:#1F2340;
+  --yellow:#FFD24D; --yellow-soft:#FFF1B8;
+  --v:#FF7F5F; --v-soft:#FFD9CE;
+  --a:#5BB4FF; --a-soft:#D3EBFF;
+  --c:#4FD1A0; --c-soft:#D3F5E4;
+  --k:#A58BFF; --k-soft:#E6DEFF;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.6; min-height:100vh;
+}
+.topbar{display:flex;height:12px}
+.topbar i{flex:1}
+.topbar i:nth-child(1){background:var(--v)}
+.topbar i:nth-child(2){background:var(--a)}
+.topbar i:nth-child(3){background:var(--c)}
+.topbar i:nth-child(4){background:var(--k)}
+
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px 56px}
+h1{margin:0 0 6px;font-size:clamp(26px,6vw,38px);line-height:1.2;font-weight:900}
+h1 span{background:linear-gradient(transparent 60%,var(--yellow) 60%);padding:0 4px}
+.sub{margin:0 0 22px;color:var(--ink-soft);font-size:15px}
+
+.card{
+  background:var(--card);border:2px solid var(--line);border-radius:20px;
+  padding:22px 20px;box-shadow:6px 6px 0 var(--k);
+}
+
+/* progress */
+.progress{margin-bottom:18px}
+.progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:700;margin-bottom:8px}
+.bar{height:14px;border:2px solid var(--line);border-radius:999px;background:#fff;overflow:hidden}
+.bar > div{height:100%;width:0;background:linear-gradient(90deg,var(--v),var(--yellow),var(--c),var(--a));transition:width .35s ease}
+
+/* part banner */
+.part{
+  margin:0 0 16px;padding:10px 14px;border:2px solid var(--line);border-radius:14px;
+}
+.part.pa{background:var(--a-soft)}
+.part.pb{background:var(--c-soft)}
+.part b{display:block;font-size:16px;font-weight:900}
+.part span{display:block;font-size:13.5px;color:var(--ink-soft);margin-top:2px}
+
+/* question */
+.qno{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:38px;height:38px;padding:0 10px;border-radius:999px;
+  background:var(--yellow);border:2px solid var(--line);font-weight:900;font-size:17px;margin-bottom:10px
+}
+.qtext{margin:0 0 16px;font-size:clamp(19px,4.6vw,23px);line-height:1.45;font-weight:900;padding:0}
+fieldset{border:0;margin:0;padding:0;min-width:0}
+.opts{display:grid;gap:10px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt label{
+  display:flex;align-items:center;gap:12px;min-height:56px;padding:12px 16px;
+  border:2px solid var(--line);border-radius:14px;background:#fff;
+  font-size:16px;font-weight:500;cursor:pointer;
+  transition:transform .12s ease, background .12s ease, box-shadow .12s ease;
+}
+.opt label::before{
+  content:"";flex:none;width:22px;height:22px;border:2px solid var(--line);border-radius:50%;background:#fff;
+}
+.opt:nth-child(1) label:hover{background:var(--v-soft)}
+.opt:nth-child(2) label:hover{background:var(--a-soft)}
+.opt:nth-child(3) label:hover{background:var(--c-soft)}
+.opt:nth-child(4) label:hover{background:var(--k-soft)}
+.opt:nth-child(1) input:checked + label{background:var(--v-soft)}
+.opt:nth-child(2) input:checked + label{background:var(--a-soft)}
+.opt:nth-child(3) input:checked + label{background:var(--c-soft)}
+.opt:nth-child(4) input:checked + label{background:var(--k-soft)}
+.opt input:checked + label{font-weight:700;box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+.opt input:checked + label::before{background:var(--ink);box-shadow:inset 0 0 0 4px #fff}
+.opt input:focus-visible + label{outline:3px solid var(--ink);outline-offset:3px}
+
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+.btn{
+  appearance:none;font:inherit;font-weight:900;font-size:16px;cursor:pointer;
+  min-height:48px;padding:0 22px;border-radius:999px;border:2px solid var(--line);
+  background:#fff;color:var(--ink);box-shadow:3px 3px 0 var(--ink);
+  transition:transform .1s ease, box-shadow .1s ease;
+}
+.btn:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.btn.primary{background:var(--yellow)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+
+/* result */
+.result-card{padding:0;overflow:hidden}
+.result-head{padding:26px 22px 22px;border-bottom:2px solid var(--line);background:linear-gradient(100deg,var(--v),var(--a),var(--c),var(--k))}
+.chip{
+  display:inline-block;padding:3px 14px;border-radius:999px;background:var(--ink);color:var(--yellow);
+  font-size:13px;font-weight:700;margin-bottom:12px
+}
+.result-title{margin:0;font-size:clamp(24px,6vw,34px);line-height:1.3;font-weight:900}
+.result-title .x{display:inline-block;margin:0 6px;font-weight:700}
+.result-tag{margin:8px 0 0;font-size:15px;font-weight:700}
+.result-body{padding:20px 22px 24px;background:#fff}
+
+.sec-title{
+  display:inline-block;margin:4px 0 10px;padding:3px 14px;border-radius:999px;
+  background:var(--yellow);border:2px solid var(--line);font-size:15px;font-weight:900
+}
+.blocks{display:grid;gap:10px;margin-bottom:18px}
+.block{border:2px solid var(--line);border-radius:14px;padding:12px 14px;background:var(--soft)}
+.block h3{margin:0 0 2px;font-size:17px;font-weight:900}
+.block p{margin:0;font-size:15.5px}
+.t-i,.t-f{--soft:var(--a-soft)}
+.t-c,.t-d{--soft:var(--v-soft)}
+.t-p,.t-t{--soft:var(--c-soft)}
+.t-s,.t-o{--soft:var(--k-soft)}
+
+.qs{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:8px}
+.qs li{
+  display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border:2px solid var(--line);border-radius:12px;
+  background:var(--yellow-soft);font-size:15.5px
+}
+.qs li::before{content:"?";flex:none;width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--yellow);
+  display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:900;margin-top:1px}
+
+.mixnote{margin:0 0 16px;padding:10px 14px;border-radius:12px;background:#fff;border:2px solid var(--line);font-size:14.5px}
+.note{
+  margin:0 0 10px;padding:12px 14px;border:2px dashed var(--line);border-radius:14px;background:var(--yellow-soft);
+  font-size:14.5px
+}
+.result-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:18px}
+
+[hidden]{display:none !important}
+@media (max-width:480px){
+  .card{padding:18px 14px;box-shadow:4px 4px 0 var(--k)}
+  .result-head,.result-body{padding-left:16px;padding-right:16px}
+  .nav .btn{flex:1;padding:0 12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="topbar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<main class="wrap">
+  <h1><span>職涯探索小測驗</span></h1>
+  <p class="sub">8 題單選，約 8–10 分鐘。沒有對錯，選你比較想做、比較有動力投入的。</p>
+
+  <section id="quiz" aria-live="polite">
+    <div class="progress">
+      <div class="progress-row"><span id="progressText">已完成 0 / 8 題</span><span id="stepText">第 1 題</span></div>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" id="bar"><div id="barFill"></div></div>
+    </div>
+    <div class="card">
+      <div class="part pa" id="part"><b id="partTitle"></b><span id="partDesc"></span></div>
+      <div class="qno" id="qno">1</div>
+      <fieldset>
+        <legend class="qtext" id="qtext"></legend>
+        <div class="opts" id="opts"></div>
+      </fieldset>
+      <div class="nav">
+        <button type="button" class="btn" id="prev">上一題</button>
+        <button type="button" class="btn primary" id="next" disabled>下一題</button>
+      </div>
+    </div>
+  </section>
+
+  <section id="result" hidden>
+    <div class="card result-card" id="resultCard"></div>
+  </section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 資料 ---------- */
+  // c = 該題 A/B/C/D 四個選項依序對應的計分代碼（不顯示給學生）
+  var PARTS = {
+    A:{cls:"pa",title:"面向 A｜我喜歡解決什麼問題？",desc:"從整理資訊、分析問題、創造想法、協助他人等不同任務，找出自己比較有興趣的方向。"},
+    B:{cls:"pb",title:"面向 B｜我喜歡怎麼工作？",desc:"從自主安排、團隊合作、明確流程、變化與挑戰等情境，探索自己偏好的工作方式。"}
+  };
+  var QUESTIONS = [
+    {p:"A",q:"如果老師請你和同學一起完成一個專題，你最想負責哪一部分？",
+     o:["把蒐集到的資料整理好，找出重點","找出專題目前卡住的地方，想辦法改善","想一個有趣、吸引人的主題或呈現方式","確認大家都理解任務，協助分工與合作"],c:["S","I","C","P"]},
+    {p:"A",q:"如果你有一個下午，可以自由選擇做一件事，你比較想做什麼？",
+     o:["研究一個有興趣的主題，把來龍去脈弄清楚","動手做出一個東西，或試試新的方法","規劃一場活動，讓大家有好的體驗","幫一個人解決他遇到的困難"],c:["I","C","P","P"]},
+    {p:"A",q:"如果你發現一件事情一直做不好，你第一個想做的是什麼？",
+     o:["找出原因，看看問題究竟出在哪裡","重新設計做法，試試不同的解決方案","了解受到影響的人怎麼想、需要什麼","把步驟和規則整理清楚，避免問題再發生"],c:["I","C","P","S"]},
+    {p:"A",q:"以下哪一種成果最讓你有成就感？",
+     o:["把複雜的事情弄懂，並清楚地解釋出來","想出一個原本沒有的點子或作品","讓一件原本不順利的事情變得更有效率","因為自己的協助，讓別人有所收穫"],c:["I","C","S","P"]},
+    {p:"B",q:"想像你未來有一份工作，你比較期待哪一種工作日？",
+     o:["有一段完整的時間，可以自己專心研究和思考","和不同的人討論，一起推進事情","有明確的目標和安排，知道每天該完成什麼","每天會遇到不同的事情，需要臨場應變"],c:["F","T","O","D"]},
+    {p:"B",q:"如果主管交給你一個新任務，你最希望得到什麼？",
+     o:["清楚的目標、完成標準與期限","一個大方向，讓我自己決定怎麼做","可以一起討論、互相交換想法的夥伴","一個有挑戰性的目標，讓我自己摸索新方法"],c:["O","F","T","D"]},
+    {p:"B",q:"如果一個專案需要兩個月才能完成，你比較喜歡哪一種過程？",
+     o:["專注在自己負責的部分，穩定把成果做好","定期和團隊討論，從不同觀點中調整方向","按照階段計畫逐步完成，進度清楚可掌握","過程中不斷嘗試、修正，讓成果越來越好"],c:["F","T","O","D"]},
+    {p:"B",q:"如果有兩份工作，條件差不多，你會比較想選哪一份？",
+     o:["工作內容相對固定，可以累積專業、越做越熟練","經常接觸不同的人，透過合作完成任務","有機會自己決定做事的方法和優先順序","任務與挑戰常有變化，需要持續學習新事物"],c:["O","T","F","D"]}
+  ];
+
+  var TYPES_A = ["I","C","P","S"];
+  var TYPES_B = ["F","T","O","D"];
+
+  // 結果文案（可直接修改）
+  var A = {
+    I:{name:"分析與理解",task:"釐清問題、整理資訊、研究原因，並找出事情背後的規律。",ask:"你喜歡的是「把問題想清楚」，還是「找到答案後實際執行」？"},
+    C:{name:"創造與改善",task:"發想點子、設計方案、試著把事情做得更好。",ask:"你喜歡的是「想出新點子」，還是「把點子做出來並持續改善」？"},
+    P:{name:"人與協作",task:"理解別人的需求、提供協助，並促進大家一起合作。",ask:"你喜歡的是「一對一幫助別人」，還是「讓一群人順利合作」？"},
+    S:{name:"組織與執行",task:"整理資訊、規劃步驟、建立流程，讓事情有條理地完成。",ask:"你喜歡的是「把流程設計好」，還是「照著流程把事情確實做完」？"}
+  };
+  var B = {
+    F:{name:"自主與專注",scene:"有一段可以自己思考的時間，能自行安排處理方式，並對成果負責。",ask:"你喜歡獨立思考，但是否也享受把自己的發現分享給別人？"},
+    T:{name:"團隊與互動",scene:"經常和不同的人討論、交換想法，一起把事情往前推進。",ask:"如果大家意見常常不一致，你還會享受討論的過程嗎？"},
+    O:{name:"結構與明確",scene:"目標清楚、流程明確、進度可掌握，知道每天該完成什麼。",ask:"如果工作內容有趣，但規則和方向很少，你還會覺得自在嗎？"},
+    D:{name:"變化與挑戰",scene:"常有新任務，需要嘗試新方法、臨場應變，並持續學習新事物。",ask:"如果每天的事情都不一樣，你需要什麼支持，才能保持穩定的步調？"}
+  };
+  var NOTE_SITUATION = "如果你覺得每個選項都可以，這次的選擇可能受到情境影響，不需要勉強選出唯一答案。";
+  var NOTE_DISCLAIMER = "這是根據本次選擇整理出的探索線索，不是職業適性診斷，也不代表你只能做某一類工作。";
+
+  /* ---------- 狀態 ---------- */
+  var answers = new Array(QUESTIONS.length).fill(-1);
+  var cur = 0;
+  var $ = function(id){return document.getElementById(id);};
+  var el = {
+    quiz:$("quiz"), result:$("result"), card:$("resultCard"),
+    part:$("part"), partTitle:$("partTitle"), partDesc:$("partDesc"),
+    qno:$("qno"), qtext:$("qtext"), opts:$("opts"),
+    prev:$("prev"), next:$("next"),
+    progressText:$("progressText"), stepText:$("stepText"), bar:$("bar"), fill:$("barFill")
+  };
+
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+  function answeredCount(){return answers.filter(function(a){return a>=0;}).length;}
+
+  function renderQuestion(){
+    var item = QUESTIONS[cur], part = PARTS[item.p];
+    el.part.className = "part "+part.cls;
+    el.partTitle.textContent = part.title;
+    el.partDesc.textContent = part.desc;
+    el.qno.textContent = cur+1;
+    el.qtext.textContent = item.q;
+    el.opts.innerHTML = item.o.map(function(text,i){
+      var id = "q"+cur+"o"+i;
+      return '<div class="opt"><input type="radio" name="q'+cur+'" id="'+id+'" value="'+i+'"'+(answers[cur]===i?" checked":"")+'>'+
+             '<label for="'+id+'">'+esc(text)+'</label></div>';
+    }).join("");
+    Array.prototype.forEach.call(el.opts.querySelectorAll("input"),function(inp){
+      inp.addEventListener("change",function(){ answers[cur] = parseInt(inp.value,10); updateChrome(); });
+    });
+    updateChrome();
+  }
+
+  function updateChrome(){
+    var done = answeredCount();
+    el.progressText.textContent = "已完成 "+done+" / "+QUESTIONS.length+" 題";
+    el.stepText.textContent = "第 "+(cur+1)+" 題";
+    el.fill.style.width = (done/QUESTIONS.length*100)+"%";
+    el.bar.setAttribute("aria-valuenow",done);
+    el.prev.disabled = cur===0;
+    el.next.disabled = answers[cur]<0;
+    el.next.textContent = cur===QUESTIONS.length-1 ? "查看我的結果" : "下一題";
+  }
+
+  el.prev.addEventListener("click",function(){ if(cur>0){cur--;renderQuestion();} });
+  el.next.addEventListener("click",function(){
+    if(answers[cur]<0) return;
+    if(cur<QUESTIONS.length-1){cur++;renderQuestion();} else showResult();
+  });
+
+  /* ---------- 計分：兩個面向分開 ---------- */
+  function tally(){
+    var s = {I:0,C:0,P:0,S:0,F:0,T:0,O:0,D:0};
+    answers.forEach(function(a,qi){ if(a>=0) s[QUESTIONS[qi].c[a]]++; });
+    return s;
+  }
+  function tops(s,types){
+    var max = Math.max.apply(null,types.map(function(t){return s[t];}));
+    return types.filter(function(t){return s[t]===max;});
+  }
+
+  function showResult(){
+    var s = tally();
+    var ta = tops(s,TYPES_A), tb = tops(s,TYPES_B);
+    var nameA = ta.map(function(t){return A[t].name;}).join("／");
+    var nameB = tb.map(function(t){return B[t].name;}).join("／");
+
+    var taskBlocks = ta.map(function(t){
+      return '<div class="block t-'+t.toLowerCase()+'"><h3>'+esc(A[t].name)+'</h3><p>'+esc(A[t].task)+'</p></div>';
+    }).join("");
+    var sceneBlocks = tb.map(function(t){
+      return '<div class="block t-'+t.toLowerCase()+'"><h3>'+esc(B[t].name)+'</h3><p>'+esc(B[t].scene)+'</p></div>';
+    }).join("");
+    var asks = ta.map(function(t){return A[t].ask;}).concat(tb.map(function(t){return B[t].ask;}));
+
+    var mix = "";
+    if(ta.length>1 || tb.length>1){
+      var parts = [];
+      if(ta.length>1) parts.push("在「喜歡解決什麼問題」上，"+nameA+" 的分數一樣高");
+      if(tb.length>1) parts.push("在「喜歡怎麼工作」上，"+nameB+" 的分數一樣高");
+      mix = '<p class="mixnote"><b>混合傾向：</b>'+esc(parts.join("；"))+"。下面把並列的每一種都列出來，可以一起參考。</p>";
+    }
+
+    el.card.innerHTML =
+      '<div class="result-head"><span class="chip">我的探索結果</span>'+
+      '<h2 class="result-title" id="resultTitle" tabindex="-1">'+esc(nameA)+'<span class="x">×</span>'+esc(nameB)+'</h2></div>'+
+      '<div class="result-body">'+ mix +
+      '<span class="sec-title">你可能喜歡的任務</span><div class="blocks">'+taskBlocks+'</div>'+
+      '<span class="sec-title">你可能偏好的工作情境</span><div class="blocks">'+sceneBlocks+'</div>'+
+      '<span class="sec-title">可以繼續探索的問題</span><ul class="qs">'+asks.map(function(t){return "<li>"+esc(t)+"</li>";}).join("")+'</ul>'+
+      '<p class="note">'+esc(NOTE_SITUATION)+'</p>'+
+      '<p class="note">'+esc(NOTE_DISCLAIMER)+'</p>'+
+      '<div class="result-actions"><button type="button" class="btn" id="retryBtn">重新作答</button></div></div>';
+
+    el.quiz.hidden = true;
+    el.result.hidden = false;
+    $("retryBtn").addEventListener("click",function(){
+      answers = new Array(QUESTIONS.length).fill(-1);
+      cur = 0;
+      el.result.hidden = true;
+      el.quiz.hidden = false;
+      renderQuestion();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+    window.scrollTo({top:0,behavior:"smooth"});
+    $("resultTitle").focus({preventScroll:true});
+  }
+
+  renderQuestion();
+})();
+</script>
+</body>
+</html>
