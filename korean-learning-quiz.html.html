@@ -1,0 +1,362 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>韓語學習風格小測驗</title>
+<style>
+:root{
+  --ink:#1F2340; --ink-soft:#4A4F6B; --paper:#FFFBF2; --card:#FFFFFF; --line:#1F2340;
+  --yellow:#FFD24D; --yellow-soft:#FFF1B8;
+  --v:#FF7F5F; --v-soft:#FFD9CE;
+  --a:#5BB4FF; --a-soft:#D3EBFF;
+  --c:#4FD1A0; --c-soft:#D3F5E4;
+  --k:#A58BFF; --k-soft:#E6DEFF;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  background:var(--paper); color:var(--ink);
+  font-family:"Noto Sans TC","PingFang TC","Microsoft JhengHei",system-ui,sans-serif;
+  line-height:1.6; min-height:100vh;
+}
+.topbar{display:flex;height:12px}
+.topbar i{flex:1}
+.topbar i:nth-child(1){background:var(--v)}
+.topbar i:nth-child(2){background:var(--a)}
+.topbar i:nth-child(3){background:var(--c)}
+.topbar i:nth-child(4){background:var(--k)}
+
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px 56px}
+h1{margin:0 0 6px;font-size:clamp(26px,6vw,38px);line-height:1.2;font-weight:900}
+h1 span{background:linear-gradient(transparent 60%,var(--yellow) 60%);padding:0 4px}
+.sub{margin:0 0 22px;color:var(--ink-soft);font-size:15px}
+
+.card{
+  background:var(--card);border:2px solid var(--line);border-radius:20px;
+  padding:22px 20px;box-shadow:6px 6px 0 var(--k);
+}
+
+/* progress */
+.progress{margin-bottom:18px}
+.progress-row{display:flex;justify-content:space-between;align-items:baseline;font-size:14px;font-weight:700;margin-bottom:8px}
+.bar{height:14px;border:2px solid var(--line);border-radius:999px;background:#fff;overflow:hidden}
+.bar > div{height:100%;width:0;background:linear-gradient(90deg,var(--v),var(--yellow),var(--c),var(--a));transition:width .35s ease}
+
+/* question */
+.qno{
+  display:inline-flex;align-items:center;justify-content:center;
+  min-width:38px;height:38px;padding:0 10px;border-radius:999px;
+  background:var(--yellow);border:2px solid var(--line);font-weight:900;font-size:17px;margin-bottom:10px
+}
+.qtext{margin:0 0 16px;font-size:clamp(19px,4.6vw,23px);line-height:1.45;font-weight:900}
+fieldset{border:0;margin:0;padding:0}
+.opts{display:grid;gap:10px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt label{
+  display:flex;align-items:center;gap:12px;min-height:56px;padding:12px 16px;
+  border:2px solid var(--line);border-radius:14px;background:#fff;
+  font-size:16px;font-weight:500;cursor:pointer;
+  transition:transform .12s ease, background .12s ease, box-shadow .12s ease;
+}
+.opt label::before{
+  content:"";flex:none;width:22px;height:22px;border:2px solid var(--line);border-radius:50%;background:#fff;
+}
+.opt:nth-child(1) label:hover{background:var(--v-soft)}
+.opt:nth-child(2) label:hover{background:var(--a-soft)}
+.opt:nth-child(3) label:hover{background:var(--c-soft)}
+.opt:nth-child(4) label:hover{background:var(--k-soft)}
+.opt:nth-child(1) input:checked + label{background:var(--v-soft)}
+.opt:nth-child(2) input:checked + label{background:var(--a-soft)}
+.opt:nth-child(3) input:checked + label{background:var(--c-soft)}
+.opt:nth-child(4) input:checked + label{background:var(--k-soft)}
+.opt input:checked + label{font-weight:700;box-shadow:3px 3px 0 var(--ink);transform:translate(-1px,-1px)}
+.opt input:checked + label::before{background:var(--ink);box-shadow:inset 0 0 0 4px #fff}
+.opt input:focus-visible + label{outline:3px solid var(--ink);outline-offset:3px}
+
+.nav{display:flex;justify-content:space-between;gap:12px;margin-top:20px}
+.btn{
+  appearance:none;font:inherit;font-weight:900;font-size:16px;cursor:pointer;
+  min-height:48px;padding:0 22px;border-radius:999px;border:2px solid var(--line);
+  background:#fff;color:var(--ink);box-shadow:3px 3px 0 var(--ink);
+  transition:transform .1s ease, box-shadow .1s ease;
+}
+.btn:hover:not(:disabled){transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--ink)}
+.btn:active:not(:disabled){transform:translate(2px,2px);box-shadow:1px 1px 0 var(--ink)}
+.btn:focus-visible{outline:3px solid var(--ink);outline-offset:3px}
+.btn.primary{background:var(--yellow)}
+.btn:disabled{opacity:.4;cursor:not-allowed;box-shadow:none}
+.btn.ghost{box-shadow:none;background:transparent}
+
+/* result */
+.result-card{padding:0;overflow:hidden}
+.result-head{padding:26px 22px 20px;border-bottom:2px solid var(--line)}
+.chip{
+  display:inline-block;padding:3px 14px;border-radius:999px;background:var(--ink);color:var(--yellow);
+  font-size:13px;font-weight:700;margin-bottom:12px
+}
+.result-title{margin:0;font-size:clamp(26px,6.5vw,36px);line-height:1.25;font-weight:900}
+.result-tag{margin:8px 0 0;font-size:clamp(17px,4.4vw,20px);font-weight:700}
+.result-body{padding:20px 22px 24px;background:#fff}
+.result-body p{margin:0 0 16px;font-size:16px}
+.sug-title{
+  display:inline-block;margin:4px 0 10px;padding:3px 14px;border-radius:999px;
+  background:var(--yellow);border:2px solid var(--line);font-size:15px;font-weight:900
+}
+.sug{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.sug li{
+  display:flex;gap:10px;align-items:flex-start;padding:10px 14px;border:2px solid var(--line);border-radius:12px;
+  background:var(--soft,#fff);font-size:15.5px
+}
+.sug li::before{content:"";flex:none;width:12px;height:12px;margin-top:7px;border-radius:50%;background:var(--main,var(--ink));border:2px solid var(--line)}
+.type-v{--main:var(--v);--soft:var(--v-soft)}
+.type-a{--main:var(--a);--soft:var(--a-soft)}
+.type-c{--main:var(--c);--soft:var(--c-soft)}
+.type-k{--main:var(--k);--soft:var(--k-soft)}
+.result-head.type-v{background:var(--v)}
+.result-head.type-a{background:var(--a)}
+.result-head.type-c{background:var(--c)}
+.result-head.type-k{background:var(--k)}
+.result-head.type-mix{background:linear-gradient(100deg,var(--v),var(--a),var(--c),var(--k))}
+
+.mix-block{border:2px solid var(--line);border-radius:16px;padding:14px 14px 16px;margin-bottom:14px;background:var(--soft)}
+.mix-block h3{margin:0 0 2px;font-size:19px;font-weight:900}
+.mix-block .mix-tag{margin:0 0 10px;font-size:15px;font-weight:500}
+.mix-block .sug li{background:#fff}
+
+.note{
+  margin:6px 0 0;padding:12px 14px;border:2px dashed var(--line);border-radius:14px;background:var(--yellow-soft);
+  font-size:14.5px;color:var(--ink)
+}
+.result-actions{display:flex;flex-wrap:wrap;gap:12px;margin-top:20px}
+
+/* experiment panel */
+.lab{margin-top:20px;padding:18px 16px;border:2px solid var(--line);border-radius:16px;background:var(--yellow-soft)}
+.lab h3{margin:0 0 12px;font-size:19px;font-weight:900}
+.lab label{display:block;margin:12px 0 6px;font-size:15.5px;font-weight:700}
+.lab textarea{
+  width:100%;min-height:84px;padding:10px 12px;border:2px solid var(--line);border-radius:12px;
+  font:inherit;font-size:15.5px;background:#fff;color:var(--ink);resize:vertical
+}
+.lab textarea:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+
+[hidden]{display:none !important}
+@media (max-width:480px){
+  .card{padding:18px 14px;box-shadow:4px 4px 0 var(--k)}
+  .result-head,.result-body{padding-left:16px;padding-right:16px}
+  .nav .btn{flex:1;padding:0 12px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none !important}}
+</style>
+</head>
+<body>
+<div class="topbar" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+<main class="wrap">
+  <h1><span>韓語學習風格小測驗</span></h1>
+  <p class="sub">每題選一個最像你的答案，沒有對錯。</p>
+
+  <!-- quiz -->
+  <section id="quiz" aria-live="polite">
+    <div class="progress">
+      <div class="progress-row"><span id="progressText">已完成 0 / 8 題</span><span id="stepText">第 1 題</span></div>
+      <div class="bar" role="progressbar" aria-valuemin="0" aria-valuemax="8" aria-valuenow="0" id="bar"><div id="barFill"></div></div>
+    </div>
+    <div class="card">
+      <div class="qno" id="qno">1</div>
+      <fieldset>
+        <legend class="qtext" id="qtext"></legend>
+        <div class="opts" id="opts"></div>
+      </fieldset>
+      <div class="nav">
+        <button type="button" class="btn" id="prev">上一題</button>
+        <button type="button" class="btn primary" id="next" disabled>下一題</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- result -->
+  <section id="result" hidden>
+    <div class="card result-card" id="resultCard"></div>
+  </section>
+</main>
+
+<script>
+(function(){
+  "use strict";
+
+  /* ---------- 資料 ---------- */
+  // 每題四個選項，依序對應 V / A / C / K（代碼不顯示給學生）
+  var CODES = ["V","A","C","K"];
+  var QUESTIONS = [
+    {q:"如果你要記住一個剛認識的人，你通常最容易記得什麼？",
+     o:["他的長相、穿著或外型特徵","他的聲音、說話方式或語氣","他的名字、背景，以及你們聊過的內容","你們一起做過什麼，或當時發生的事"]},
+    {q:"去過一家很有特色的餐廳後，哪一種方式最容易讓你回想起它？",
+     o:["看到店內照片，就能想起當時的樣子","想起店裡的聲音、音樂，或大家聊天的情景","記得餐廳的特色、餐點分類或值得推薦的原因","想起自己點了什麼、吃了什麼，以及當時的體驗"]},
+    {q:"回想一次印象深刻的旅行，你最先浮現的是什麼？",
+     o:["沿途的景色、建築或照片中的畫面","當地的語言、聲音，或某段對話","旅行的路線、行程安排，以及事情的前後順序","自己做過的活動、遇到的挑戰或親身體驗"]},
+    {q:"朋友教你玩一個沒玩過的桌遊，你比較希望怎麼開始？",
+     o:["先看圖示、卡牌範例或一局示範","先聽朋友口頭解釋規則，再問不懂的地方","先理解遊戲規則、勝利條件和整體邏輯","直接玩一局，遇到不懂的地方再學"]},
+    {q:"聽到一首喜歡的歌，你通常怎麼記住它？",
+     o:["記得 MV、表演畫面，或歌詞的視覺排列","反覆聽旋律、跟唱，慢慢記住歌詞","理解歌詞意思、段落結構，或歌詞之間的關聯","跟著節奏唱、做動作，或在情境中反覆使用"]},
+    {q:"想學會一項新技能時，哪一種方式最吸引你？",
+     o:["先看教學影片或圖解，知道完整步驟","聽別人解說、分享經驗，或跟著口頭指示做","先弄懂原理、方法和步驟之間的關係","自己動手試，從操作和修正中慢慢學會"]},
+    {q:"如果你突然想起自己有一件事還沒做，通常是什麼提醒了你？",
+     o:["看到相關物品、通知、便條或待辦清單","想起別人交代時說過的話，或自己口頭答應的內容","想到事情的邏輯、期限，或它和其他任務的關係","到了某個時間、地點，或開始做相關事情時才想起"]},
+    {q:"當你發現自己忘記一件學過的事，你最直覺會怎麼做？",
+     o:["找回筆記、圖片或之前看過的範例","再聽一次、唸出來，或找人討論","重新整理規則、概念，找出自己卡住的地方","直接再做一次，或把它放進實際情境試試看"]}
+  ];
+
+  var RESULTS = {
+    V:{cls:"type-v",title:"你是畫面與視覺線索派",tag:"讓資訊看得見，更容易開始理解。",
+       desc:"你可能比較容易透過畫面、位置、圖像或視覺提示抓住資訊。學韓文時，可以試著把抽象的單字和文法變得具體、看得見。",
+       tips:["用情境照片記單字，並遮住答案測試自己能否回想。","用表格比較相似文法，整理差異與例句。","看完筆記後合起來，試著自己回想，而不是一直重看。"]},
+    A:{cls:"type-a",title:"你是聲音與語言線索派",tag:"聽見、說出來，讓語言更熟悉。",
+       desc:"你可能比較容易透過聲音、語氣和對話掌握資訊。學韓文時，可以把聽和說融入日常，而不只是在腦中默背。",
+       tips:["選一段 30 秒的韓文音檔，先聽再對照逐字稿。","跟讀句子後，不看稿再說一次。","用新單字造句，錄下來回聽，確認自己是否真的能說出來。"]},
+    C:{cls:"type-c",title:"你是結構與意義整理派",tag:"理解規則與關聯，讓零散資訊連起來。",
+       desc:"你可能喜歡先理解一件事的邏輯、規則和前後關係。學韓文時，整理有助於理解，但還要搭配回想與實際運用，才知道自己是不是真的會了。",
+       tips:["把容易混淆的文法放在一起比較，並各寫一個例句。","學單字時補上常見搭配詞和使用情境。","合上筆記，自己造句或回答問題，檢查能不能獨立使用。"]},
+    K:{cls:"type-k",title:"你是行動與情境體驗派",tag:"把韓文用起來，在實際操作中找到感覺。",
+       desc:"你可能比較喜歡邊做邊學，透過嘗試、練習和真實情境理解內容。學韓文時，可以讓每次練習都有一個具體任務。",
+       tips:["用韓文完成一個小任務，例如點餐、自我介紹或問路。","看完教學後立刻操作或練習一次。","和同學角色扮演，試著在不看稿的情況下完成對話。"]}
+  };
+  var SHORT = {V:"畫面與視覺線索派",A:"聲音與語言線索派",C:"結構與意義整理派",K:"行動與情境體驗派"};
+  var NOTE = "即使某一派得分最高，也只表示這次作答中該類線索出現較多，不代表其他方式不適合你。";
+
+  /* ---------- 狀態 ---------- */
+  var answers = new Array(QUESTIONS.length).fill(-1);
+  var cur = 0;
+
+  var $ = function(id){return document.getElementById(id);};
+  var el = {
+    quiz:$("quiz"), result:$("result"), card:$("resultCard"),
+    qno:$("qno"), qtext:$("qtext"), opts:$("opts"),
+    prev:$("prev"), next:$("next"),
+    progressText:$("progressText"), stepText:$("stepText"), bar:$("bar"), fill:$("barFill")
+  };
+
+  function esc(s){return String(s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];});}
+
+  function answeredCount(){return answers.filter(function(a){return a>=0;}).length;}
+
+  function renderQuestion(){
+    var item = QUESTIONS[cur];
+    el.qno.textContent = cur+1;
+    el.qtext.textContent = item.q;
+    el.opts.innerHTML = item.o.map(function(text,i){
+      var id = "q"+cur+"o"+i;
+      return '<div class="opt"><input type="radio" name="q'+cur+'" id="'+id+'" value="'+i+'"'+(answers[cur]===i?" checked":"")+'>'+
+             '<label for="'+id+'">'+esc(text)+'</label></div>';
+    }).join("");
+    Array.prototype.forEach.call(el.opts.querySelectorAll("input"),function(inp){
+      inp.addEventListener("change",function(){
+        answers[cur] = parseInt(inp.value,10);
+        updateChrome();
+      });
+    });
+    updateChrome();
+  }
+
+  function updateChrome(){
+    var done = answeredCount();
+    el.progressText.textContent = "已完成 "+done+" / "+QUESTIONS.length+" 題";
+    el.stepText.textContent = "第 "+(cur+1)+" 題";
+    el.fill.style.width = (done/QUESTIONS.length*100)+"%";
+    el.bar.setAttribute("aria-valuenow",done);
+    el.prev.disabled = cur===0;
+    el.next.disabled = answers[cur]<0;
+    el.next.textContent = cur===QUESTIONS.length-1 ? "查看我的結果" : "下一題";
+  }
+
+  el.prev.addEventListener("click",function(){ if(cur>0){cur--;renderQuestion();} });
+  el.next.addEventListener("click",function(){
+    if(answers[cur]<0) return;
+    if(cur<QUESTIONS.length-1){cur++;renderQuestion();}
+    else showResult();
+  });
+
+  /* ---------- 計分 ---------- */
+  function score(){
+    var s = {V:0,A:0,C:0,K:0};
+    answers.forEach(function(a){ if(a>=0) s[CODES[a]]++; });
+    return s;
+  }
+
+  function tipsHtml(list){return '<ul class="sug">'+list.map(function(t){return "<li>"+esc(t)+"</li>";}).join("")+"</ul>";}
+
+  function showResult(){
+    var s = score();
+    var max = Math.max(s.V,s.A,s.C,s.K);
+    var top = CODES.filter(function(c){return s[c]===max;});
+    var html;
+
+    if(top.length===1){
+      var r = RESULTS[top[0]];
+      html =
+        '<div class="result-head '+r.cls+'"><span class="chip">我的測驗結果</span>'+
+        '<h2 class="result-title">'+esc(r.title)+'</h2><p class="result-tag">'+esc(r.tag)+'</p></div>'+
+        '<div class="result-body '+r.cls+'"><p>'+esc(r.desc)+'</p>'+
+        '<span class="sug-title">你的韓語實驗建議</span>'+tipsHtml(r.tips)+
+        '<p class="note">'+esc(NOTE)+'</p>'+actionsHtml()+'</div>';
+    }else{
+      var names = top.map(function(c){return SHORT[c];}).join("、");
+      html =
+        '<div class="result-head type-mix"><span class="chip">我的測驗結果</span>'+
+        '<h2 class="result-title">你是混合型</h2>'+
+        '<p class="result-tag">'+esc(names)+'的線索出現得一樣多。</p></div>'+
+        '<div class="result-body"><p>你在這幾種線索上表現接近，下面把每一種的實驗建議都列給你，可以都試試看。</p>'+
+        top.map(function(c){
+          var r = RESULTS[c];
+          return '<div class="mix-block '+r.cls+'"><h3>'+esc(SHORT[c])+'</h3><p class="mix-tag">'+esc(r.tag)+'</p>'+
+                 '<span class="sug-title">你的韓語實驗建議</span>'+tipsHtml(r.tips)+'</div>';
+        }).join("")+
+        '<p class="note">'+esc(NOTE)+'</p>'+actionsHtml()+'</div>';
+    }
+
+    el.card.innerHTML = html;
+    el.quiz.hidden = true;
+    el.result.hidden = false;
+    bindResult();
+    window.scrollTo({top:0,behavior:"smooth"});
+    var h = el.card.querySelector(".result-title"); if(h){h.setAttribute("tabindex","-1");h.focus({preventScroll:true});}
+  }
+
+  function actionsHtml(){
+    return '<div class="result-actions">'+
+      '<button type="button" class="btn primary" id="labBtn" aria-expanded="false" aria-controls="lab">設計我的韓語學習實驗</button>'+
+      '<button type="button" class="btn" id="retryBtn">重新作答</button></div>'+
+      '<div class="lab" id="lab" hidden>'+
+      '<h3>設計我的韓語學習實驗</h3>'+
+      '<label for="lab1">我目前最想改善的韓語能力是什麼？</label><textarea id="lab1"></textarea>'+
+      '<label for="lab2">我下週要嘗試哪一種具體方法？</label><textarea id="lab2"></textarea>'+
+      '<label for="lab3">我要怎麼確認這個方法真的有幫助？</label><textarea id="lab3"></textarea>'+
+      '</div>';
+  }
+
+  function bindResult(){
+    var lab = $("lab"), labBtn = $("labBtn");
+    labBtn.addEventListener("click",function(){
+      var open = lab.hidden;
+      lab.hidden = !open;
+      labBtn.setAttribute("aria-expanded",String(open));
+      if(open){ lab.scrollIntoView({behavior:"smooth",block:"center"}); $("lab1").focus({preventScroll:true}); }
+    });
+    $("retryBtn").addEventListener("click",function(){
+      answers = new Array(QUESTIONS.length).fill(-1);
+      cur = 0;
+      el.result.hidden = true;
+      el.quiz.hidden = false;
+      renderQuestion();
+      window.scrollTo({top:0,behavior:"smooth"});
+    });
+  }
+
+  renderQuestion();
+})();
+</script>
+</body>
+</html>
+
+</body></html>
